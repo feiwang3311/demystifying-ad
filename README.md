@@ -1,7 +1,7 @@
 # supplemental
 
 The complete formal presentation is in pdf/ directory. To build, type:
-`cd pdf1
+`cd pdf1`
 `dflatex paper_typeless.tex`
 
 The verification code of formal presentation is at src/main/scala/formal/.
