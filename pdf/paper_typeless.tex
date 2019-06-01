@@ -1,0 +1,1370 @@
+%% ICFP: 27 pages + references
+
+\documentclass[acmsmall,10pt,review,anonymous]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
+%% For double-blind review submission
+%%\documentclass[acmsmall,10pt,review,anonymous]{acmart}\settopmatter{printfolios=true}
+%% For single-blind review submission
+%\documentclass[acmsmall,10pt,review]{acmart}\settopmatter{printfolios=true}
+%% For final camera-ready submission
+%\documentclass[acmsmall10pt,]{acmart}\settopmatter{}
+
+%% Note: Authors migrating a paper from PACMPL format to traditional
+%% SIGPLAN proceedings format should change 'acmsmall' to
+%% 'sigplan'.
+
+
+%% Some recommended packages.
+% \usepackage{booktabs}   %% For formal tables:
+%                         %% http://ctan.org/pkg/booktabs
+% \usepackage{subcaption} %% For complex figures with subfigures/subcaptions
+%                         %% http://ctan.org/pkg/subcaption
+
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[scaled=0.8]{beramono}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{xcolor,colortbl}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{paralist}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{flushend}
+\usepackage{bcprules}
+\usepackage{nicefrac}
+\usepackage{xfrac}
+\usepackage[normalem]{ulem}
+
+%\usepackage{paralist}
+%\usepackage{titlesec}
+%\usepackage{booktabs}
+%\usepackage{parskip}
+
+%\usepackage[x11names, rgb]{xcolor}
+%\usepackage[utf8]{inputenc}
+%\usepackage{tikz}
+%\usetikzlibrary{snakes,arrows,shapes}
+%\usepackage{amsmath}
+
+
+%\usetikzlibrary{matrix,chains,scopes,positioning,arrows,fit}
+
+
+% ----- begin macros/formatting
+
+\input{../macros}
+\input{../dot_macros}
+
+%\setlength{\floatsep}{6pt plus 2pt minus 2pt}
+%\setlength{\textfloatsep}{6pt plus 2pt minus 2pt}
+
+%\setlength{\intextsep}{-10pt}
+%\setlength{\intextsep}{0pt}
+%
+%\setlength{\floatsep}{2pt plus 2pt minus 2pt}        % space between floats
+%\setlength{\textfloatsep}{4pt plus 2pt minus 2pt}    % space between floats and text
+%\setlength{\intextsep}{2pt plus 2pt minus 2pt}
+%
+%\setlength{\dblfloatsep}{4pt plus 2pt minus 2pt}
+%\setlength{\dbltextfloatsep}{2pt plus 2pt minus 2pt}
+
+% ----- end macros/formatting
+
+
+% ----- begin acm template info
+%\raggedbottom
+\makeatletter\if@ACM@journal\makeatother
+%% Journal information (used by PACMPL format)
+%% Supplied to authors by publisher for camera-ready submission
+\acmJournal{PACMPL}
+\acmVolume{2}
+\acmNumber{ICFP}
+\acmArticle{1}
+\acmYear{2019}
+\acmMonth{9}
+\acmDOI{10.1145/nnnnnnn.nnnnnnn}
+\startPage{1}
+\else\makeatother
+%% Conference information (used by SIGPLAN proceedings format)
+%% Supplied to authors by publisher for camera-ready submission
+\acmConference[PL'17]{ACM SIGPLAN Conference on Programming Languages}{January 01--03, 2017}{New York, NY, USA}
+\acmYear{2017}
+\acmISBN{978-x-xxxx-xxxx-x/YY/MM}
+\acmDOI{10.1145/nnnnnnn.nnnnnnn}
+\startPage{1}
+\fi
+
+
+%% Copyright information
+%% Supplied to authors (based on authors' rights management selection;
+%% see authors.acm.org) by publisher for camera-ready submission
+\setcopyright{none}             %% For review submission
+%\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\copyrightyear{2017}           %% If different from \acmYear
+
+
+%% Bibliography style
+\bibliographystyle{ACM-Reference-Format}
+%% Citation style
+%% Note: author/year citations are required for papers published as an
+%% issue of PACMPL.
+\citestyle{acmauthoryear}   %% For author/year citations
+
+% ----- end acm template info
+
+
+\begin{document}
+
+
+% ----- begin title and authors
+
+\title[Demystifying Differentiable Programming: Shift/Reset the Penultimate Backpropagator]{Demystifying Differentiable Programming: \\Shift/Reset the Penultimate Backpropagator}
+
+%\subtitle{(Functional Pearl)}
+
+% Demystifying Differentiable Programming: Shift/Reset the Penultimate Backpropagator
+% (lambda is of course still the ultimate, but we show that
+% shift/reset are a useful preceding step, which translates to
+% plain lambda via cps conversion)
+
+% ----- end title and authors
+
+
+% %% Author information
+% %% Contents and number of authors suppressed with 'anonymous'.
+% %% Each author should be introduced by \author, followed by
+% %% \authornote (optional), \orcid (optional), \affiliation, and
+% %% \email.
+% %% An author may have multiple affiliations and/or emails; repeat the
+% %% appropriate command.
+% %% Many elements are not rendered, but should be provided for metadata
+% %% extraction tools.
+
+% %% Author with single affiliation.
+% \author{First1 Last1}
+% \authornote{with author1 note}          %% \authornote is optional;
+%                                         %% can be repeated if necessary
+% \orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
+% \affiliation{
+%   \position{Position1}
+%   \department{Department1}              %% \department is recommended
+%   \institution{Institution1}            %% \institution is required
+%   \streetaddress{Street1 Address1}
+%   \city{City1}
+%   \state{State1}
+%   \postcode{Post-Code1}
+%   \country{Country1}
+% }
+% \email{first1.last1@inst1.edu}          %% \email is recommended
+
+% %% Author with two affiliations and emails.
+% \author{First2 Last2}
+% \authornote{with author2 note}          %% \authornote is optional;
+%                                         %% can be repeated if necessary
+% \orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
+% \affiliation{
+%   \position{Position2a}
+%   \department{Department2a}             %% \department is recommended
+%   \institution{Institution2a}           %% \institution is required
+%   \streetaddress{Street2a Address2a}
+%   \city{City2a}
+%   \state{State2a}
+%   \postcode{Post-Code2a}
+%   \country{Country2a}
+% }
+% \email{first2.last2@inst2a.com}         %% \email is recommended
+% \affiliation{
+%   \position{Position2b}
+%   \department{Department2b}             %% \department is recommended
+%   \institution{Institution2b}           %% \institution is required
+%   \streetaddress{Street3b Address2b}
+%   \city{City2b}
+%   \state{State2b}
+%   \postcode{Post-Code2b}
+%   \country{Country2b}
+% }
+% \email{first2.last2@inst2b.org}         %% \email is recommended
+
+
+% %% Paper note
+% %% The \thanks command may be used to create a "paper note" ---
+% %% similar to a title note or an author note, but not explicitly
+% %% associated with a particular element.  It will appear immediately
+% %% above the permission/copyright statement.
+% \thanks{with paper note}                %% \thanks is optional
+%                                         %% can be repeated if necesary
+%                                         %% contents suppressed with 'anonymous'
+
+
+% must come after author list ...
+
+\lstMakeShortInline[keywordstyle=,%
+              flexiblecolumns=false,%
+              %basewidth={0.56em, 0.52em},%
+              mathescape=false,%
+              basicstyle=\tt]@
+
+
+
+
+% \begin{abstract}
+% \input{abstract}
+% \end{abstract}
+
+
+% 2012 ACM Computing Classification System (CSS) concepts
+% Generate at 'http://dl.acm.org/ccs/ccs.cfm'.
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10011007.10011006.10011008</concept_id>
+<concept_desc>Software and its engineering~General programming languages</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10003456.10003457.10003521.10003525</concept_id>
+<concept_desc>Social and professional topics~History of programming languages</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Software and its engineering~General programming languages}
+\ccsdesc[300]{Social and professional topics~History of programming languages}
+% End of generated code
+
+
+%% Keywords
+%% comma separated list
+%\keywords{keyword1, keyword2, keyword3}  %% \keywords is optional
+
+
+% \maketitle
+
+
+%\category{D.3.4}{Programming Languages}{Processors -- Code generation, Optimization, Run-time environments}
+%\category{D.1.3}{Programming Techniques}{Concurrent Programming -- Parallel programming}
+%\category{D.3.3}{Programming Languages}{Language Constructs and Features -- Concurrent programming structures}
+
+%\terms Design, Languages, Performance
+%\keywords Staging, Code Generation, Data Structures, Extensible Compilers
+
+
+% \input{10_intro}
+% \input{20_main}
+% \input{30_eval}
+% \input{40_back}
+
+
+% \clearpage
+% {
+%\linespread{0.80}
+%\bibliographystyle{myabbrvnat}
+%\bibliographystyle{abbrv}
+%\setlength{\bibsep}{0pt}
+%\renewcommand{\bibfont}{\footnotesize}
+%\bibliographystyle{ACM-Reference-Format}
+%\vspace{3cm}
+% \bibliography{references}
+% }
+
+%\input{90_extra}
+
+\newcommand{\Let}[2]{\texttt{let}\ #1\ \texttt{=}\ #2\ \texttt{in} \ }
+\newcommand{\DLet}[2]{\underline{\texttt{let}}\ #1\ \texttt{=}\ #2\ \underline{\texttt{in}} \ }
+\newcommand{\WLet}[2]{\uwave{\texttt{let}}\ #1\ \texttt{=}\ #2\ \uwave{\texttt{in}} \ }
+\newcommand{\LetRec}[2]{\texttt{letrec}\ #1\ \texttt{=}\ #2\ \texttt{in} \ }
+\newcommand{\DLetRec}[2]{\underline{\texttt{letrec}}\ #1\ \texttt{=}\ #2\ \underline{\texttt{in}} \ }
+\newcommand{\Ref}[1]{\texttt{ref} \ #1}
+\newcommand{\DRef}[1]{\underline{\texttt{ref}} \ #1}
+\newcommand{\Fst}[1]{\texttt{fst} \ #1}
+\newcommand{\DFst}[1]{\underline{\texttt{fst}} \ #1}
+\newcommand{\Snd}[1]{\texttt{snd} \ #1}
+\newcommand{\DSnd}[1]{\underline{\texttt{snd}} \ #1}
+
+\newcommand{\Left}[1]{\texttt{inl} \ #1 }
+\newcommand{\DLeft}[1]{\underline{\texttt{inl}} \ #1}
+\newcommand{\Right}[1]{\texttt{inr} \ #1 }
+\newcommand{\DRight}[1]{\underline{\texttt{inr}} \ #1 }
+
+% \newcommand{\Left}[2]{\texttt{inl} \ #1 \ #2}
+% \newcommand{\DLeft}[2]{\underline{\texttt{inl}} \ #1 \ #2}
+% \newcommand{\Right}[2]{\texttt{inr} \ #1 \ #2}
+% \newcommand{\DRight}[2]{\underline{\texttt{inr}} \ #1 \ #2}
+\newcommand{\Pattern}[3]{\texttt{case} \ #1 \ \texttt{of} \ x^\tau \Rightarrow #2 \ \texttt{or} \ x^\tau \Rightarrow #3}
+\newcommand{\Pat}[5]{\texttt{case} \ #1 \ \texttt{of} \ #2 \Rightarrow #3 \ \texttt{or} \ #4 \Rightarrow #5}
+\newcommand{\DPat}[5]{\underline{\texttt{case}} \ #1 \ \underline{\texttt{of}} \ #2 \Rightarrow #3 \ \underline{\texttt{or}} \ #4 \Rightarrow #5}
+\newcommand{\DPatL}[5]{\underline{\texttt{case}} \ #1 \\
+                      &&\underline{\texttt{of}} \ #2 \Rightarrow #3 \\
+                      &&\underline{\texttt{or}} \ #4 \Rightarrow #5}
+\newcommand{\PatL}[5]{\texttt{case} \ #1 \\
+                      &&\texttt{of} \ #2 \Rightarrow #3 \\
+                      &&\texttt{or} \ #4 \Rightarrow #5}
+\newcommand{\REF}[1]{\texttt{Ref} \ #1}
+\newcommand{\DREF}[1]{\underline{\texttt{Ref}} \ #1}
+\newcommand{\Dat}[0]{\underline{\at} \ }
+\newcommand{\Sat}[0]{\overline{\at} \ }
+\newcommand{\Wat}[0]{\uwave{\At} \ }
+\newcommand{\At}[0]{\at \ }
+\newcommand{\WLam}[0]{\uwave{\lambda\text{ }}}
+\newcommand{\SLam}[0]{\overline{\lambda\text{ }}}
+\newcommand{\DLam}[0]{\underline{\lambda\text{ }}}
+
+\newcommand{\DAdd}[2]{\ #1 \ \underline{+} \ #2 \ }
+\newcommand{\DMul}[2]{\ #1 \ \underline{*} \ #2 \ }
+\newcommand{\DUpdate}[2]{#1 \ \underline{\mathrel{+}=} \ #2}
+\newcommand{\DDref}[1]{\ \underline{!} \ #1}
+
+
+\newcommand{\Shift}[2]{\texttt{shift} \ #1 \ \texttt{in} \ #2}
+\newcommand{\SShift}[2]{\overline{\texttt{shift}} \ #1 \ \overline{\texttt{in}} \ #2}
+\newcommand{\Res}[1]{\langle \ #1 \ \rangle}
+\newcommand{\SRes}[1]{\overline \langle \ #1 \ \overline \rangle}
+\newcommand{\DPair}[2]{\underline{(} #1 \ \underline{,} \ #2 \underline{)}}
+\newcommand{\SPair}[2]{\overline{(} #1 \ \overline{,} \ #2 \overline{)}}
+
+\newcommand{\UNIT}[0]{\texttt{Unit}}
+\newcommand{\NUM}[0]{\RR \times (\REF \RR)}
+
+\newcommand{\BOOL}[0]{\texttt{Boolean}}
+\newcommand{\TR}[0]{\texttt{Tree}}
+\newcommand{\TRR}[0]{\texttt{Tree'}}
+\newcommand{\A}[0]{\texttt{A}}
+\newcommand{\Leaf}[1]{\texttt{Leaf} \ #1}
+\newcommand{\Branch}[2]{\texttt{Branch} \ #1 \ #2}
+
+
+\newcommand{\Exp}[0]{\texttt{EXP}}
+\newcommand{\Val}[0]{\texttt{VAL}}
+\newcommand{\Id}[0]{\texttt{ID}}
+\newcommand{\Env}[0]{\texttt{ENV}}
+
+\newcommand{\Red}[1]{\textcolor[rgb]{0.00,0.00,1.00}{#1}} % do not use Red
+% \newcommand{\Red}[1]{\textcolor[rgb]{1.00,0.00,0.00}{#1}}
+\newcommand{\Green}[1]{\textcolor[rgb]{0.00,1.00,0.00}{#1}}
+\newcommand{\Blue}[1]{\textcolor[rgb]{0.00,0.00,1.00}{#1}}
+\newcommand{\ifThenElse}[3]{\texttt{if} \ #1 \ \texttt{then} \ #2 \ \texttt{else} \ #3}
+
+\section*{Formalization}
+
+\begin{figure}[h]
+\vspace{-2ex}
+\flushleft\footnotesize{
+  We consider a variant of $\lambda$-calculus with let-bindings, products, mutable references, and injection-case.
+  The language also contains delimited control operators shift and reset.
+}
+$$\footnotesize
+\ba{rll}
+\textbf{CORE LANGUAGE} \\
+\textbf{Expressions:} && \Exp\\
+% e &::=& c \ | \  x \  | \ e \ + \ e  \ |\  e \ * \ e \ | \ \lambda x. \ e \ | \ \At  e \ e \ | \ \texttt{let} \ x \ = \ e \ \texttt{in} \ e \\
+%     &|& \texttt{fst} \ e \ | \ \texttt{snd} \ e \ | \ ( e, \ e ) \ | \ \texttt{ref} \ e \ | \ ! \ e \ | \ e := e \\
+%     &|& \Left{e}{\tau} \ | \ \Right{\tau}{e} \ | \ \Pat{e}{x}{e}{x}{e} \\
+% \textbf{Meta Language Expression:} && \Exp \\
+e &::=& c \ | \  x \  | \ e \ + \ e  \ |\  e \ * \ e \ | \ \lambda x. \ e \ | \ \At e \ e \ | \ \texttt{let} \ x \ = \ e \ \texttt{in} \ e \\
+    &|& \texttt{fst} \ e \ | \ \texttt{snd} \ e \ | \ ( e, \ e ) \ | \ \texttt{ref} \ e \ | \ ! \ e \ | \ e := e \\
+    &|& \Left{e} \ | \ \Right{e} \ | \ \Pat{e}{x}{e}{x}{e} \\
+    &|& \Shift{x}{e} \ | \ \Res{e} \\
+% \textbf{Types:} \\
+% \tau &::=& \texttt{Unit} \ | \ \RR \ | \ \texttt{Ref} \ \tau \ | \ \tau \rightarrow \tau \ | \ \tau \ \times \ \tau \ | \ \tau + \tau \ | \ \mu x.\tau \\
+\textbf{Values:} && \Val\\
+                 && \text{structure left abstract}\\
+% v &::=& c \ | \ \lambda x. \ e \ | \ ( v, \ v ) \ | \ \Left{v}{\tau} \ | \ \Right{\tau}{v} \ | \ \texttt{loc} \ \\
+% && \text{Note: loc denotes locations in implicit store}\\
+\textbf{Environments:} && \Env = \Id \rightharpoonup \Val \\
+\emptyset &::=& \lambda x. \bot \ \ \ \text{where $\bot$ is a non-terminating computation} \\
+\rho[x \mapsto v] &::=& \lambda y. \ \ifThenElse{(x = y)}{v}{\At \rho \ y} \\
+\\
+\textbf{DERIVED CONSTRUCTS} \\
+\textbf{Booleans and conditionals:} \\
+% \text{Type: Boolean} &=& \UNIT + \UNIT \\
+\text{Value: True}   &=& \Left{()}  \\
+\text{Value: False}  &=& \Right{()} \\
+\ifThenElse{b}{t}{e} &=& \Pat{b}{y}{t}{z}{e} \\
+\textbf{Loops and recursion:} \\
+\LetRec{f}{\lambda x. \ e_1} e_2 &=& \Let{f'}{\lambda f'. \lambda x. \ \Let{f}{\At f' \ f'} e_1}\\
+                                  && \Let{f}{\At f' \ f'} e_2\\
+% \Let{f}{\lambda f. \ \lambda x. \ e} \At (\ \At f \ f) \ x \\
+                \text{Loops:} && \text{expressed as tail recursive functions}\\
+\textbf{Tree data structures:} \\
+% && \TR \ \A = \Leaf{\A} \ | \ \Branch{(\TR \ \A)}{(\TR \ \A)} \\% &=& \mu \alpha. \ \texttt{A} + (\alpha \times \alpha) \\
+% \text{Example tree type: } \TR \ \texttt{A} &=& \mu \alpha. \ \texttt{A} + (\alpha \times \alpha) \\
+\text{Example tree term: } t &=& \Right{(\Left{5}, \Left{6})}\\
+% \text{Example tree term: } t^{\TR \ \RR} &=& \Right{\RR}{(\Left{5}{(\TR \ \RR) \times (\TR \ \RR)}, \Left{6}{(\TR \ \RR) \times (\TR \ \RR)})}\\
+\\
+\textbf{Syntactic sugar:} \\
+                    % \hat y^\RR &=& (y, y')^{\NUM} \\ % \text{variable}\\
+         % \hat y^{\tau \ne \RR} &=& y^{\ort\bra{\tau}} \\
+    y_1 \ \mathrel{+}= \ ! \ y_2 &=& y_1 \ := \ ! \ y_1 \ + \ ! \ y_2 \\ % \text{reference} \\
+    \Let{(y, y')}{e_1}{e_2} &=& \Let{\tilde y}{e_1} \Let{y}{\Fst \tilde y} \Let{y'}{\Snd \tilde y} e_2 \\ % \text{let with tuple} \\
+    e_1 \ ; \ e_2 &=& \Let{\_}{e_1} e_2 \\ % \text{sequence} \\
+    % \lambda (y, y'). e &=& \lambda \tilde y. \ \Let{y}{\Fst{\tilde y}} \Let{y'}{\Snd \tilde y} e \\
+    % \Pat{e}{(y, y')}{e_1}{z}{e_2} &=& \Pat{e}{\tilde y}{\Let{y}{\Fst \tilde y} \Let{y'}{\Snd \tilde y} e_1}{z}{e_2}\\
+    % \Pat{e}{y}{e_1}{(z, z')}{e_2} &=& \Pat{e}{y}{e_1}{\tilde z}{\Let{z}{\Fst \tilde z} \Let{z'}{\Snd \tilde z} e_2}\\
+    % \Pat{e}{(y, y')}{e_1}{(z, z')}{e_2} &=& \PatL{e}{\tilde y}{\Let{y}{\Fst \tilde y} \Let{y'}{\Snd \tilde y} e_1}
+    %                                                 {\tilde z}{\Let{z}{\Fst \tilde z} \Let{z'}{\Snd \tilde z} e_2}\\
+\\
+\ea
+$$\vspace{2ex}
+\footnotesize\flushleft{
+  Above we show formal definitions of the language we consider. It serves as both object- and meta-language. 
+  We show the syntax of the core languages (typeless, but types can be added),
+  as well as derived constructs that express branches,
+  loops, recursion, and recursive data structures in a standard way. 
+  Syntactic sugar used in our presentation is also listed here.\\[1ex]
+
+  We assume Barendregt's variable convention throughout, such that all bound variables are pairwise different 
+  and different from the free variables.
+  This allows several rules (labeled via \# in later figures) to be simplified compared to other formulations 
+  (no need for variable substitution in transformation). \\[1ex]
+
+  For transformation, we assume that the target language is the same as object language, unless noted otherwise.
+}
+\end{figure}
+\clearpage
+
+% $\footnotesize \textbf{Variable Sugaring:} $\\
+% \vspace{-3ex}
+% \begin{minipage}[t]{0.45\textwidth}
+% $$\footnotesize
+% \ba{rll}
+% \text{forward mode:} \\
+%                     \hat y^\RR &=& (y, y')^{\RR \times \RR} \\ % \text{variable}\\
+%          \hat y^{\tau \ne \RR} &=& y^{\brt\bra{\tau}} \\
+% \ea
+% $$
+% \end{minipage}\hspace{1ex}%
+% \begin{minipage}[t]{0.45\textwidth}
+% $$\footnotesize
+% \ba{rll}
+% \text{reverse mode:} \\
+%                     \hat y^\RR &=& (y, y')^{\NUM} \\ % \text{variable}\\
+%          \hat y^{\tau \ne \RR} &=& y^{\ort\bra{\tau}} \\
+% \ea
+% $$
+% \end{minipage}\hspace{1ex}%
+
+
+% $\footnotesize \textbf{Type Transformation:} $\\
+% \vspace{-3ex}
+% \begin{minipage}[t]{0.45\textwidth}
+% $$\footnotesize
+% \ba{rll}
+% \text{forward mode:} \\
+%     \brt\bra{\UNIT} &=& \UNIT\\
+%     \brt\bra{\RR}               &=& \RR \times \RR\\
+%     \brt\bra{\REF \tau} &=& \REF \brt\bra{\tau} \\
+%     \brt\bra{\tau_1 \times \tau_2} &=& \brt\bra{\tau_1} \times \brt\bra{\tau_2} \\
+%     \brt\bra{\tau_1 \rightarrow \tau_2} &=& \brt\bra{\tau_1} \rightarrow \brt\bra{\tau_2} \\
+%     \brt\bra{\tau_1 + \tau_2} &=& \brt\bra{\tau_1} + \brt\bra{\tau_2} \\
+%     \brt\bra{\mu y. \tau} &=& \mu y. \brt\bra{\tau} \\
+%     \brt\bra{y} &=& y \\
+% \ea
+% $$
+% \end{minipage}\hspace{1ex}%
+% \begin{minipage}[t]{0.45\textwidth}
+% $$\footnotesize
+% \ba{rll}
+% \text{reverse mode:} \\
+%     \ort\bra{\UNIT} &=& \UNIT\\
+%     \ort\bra{\RR} &=& \NUM\\
+%     \ort\bra{\REF \tau} &=& \REF \ort\bra{\tau} \\
+%     \ort\bra{\tau_1 \times \tau_2} &=& \ort\bra{\tau_1} \times \ort\bra{\tau_2} \\
+%     \ort\bra{\tau_1 \rightarrow \tau_2} &=& \ort\bra{\tau_1} \rightarrow (\ort\bra{\tau_2} \rightarrow \UNIT) \rightarrow \UNIT \\
+%     \ort\bra{\tau_1 + \tau_2} &=& \ort\bra{\tau_1} + \ort\bra{\tau_2} \\
+%     \ort\bra{\mu y. \tau} &=& \mu y. \ort\bra{\tau} \\
+%     \ort\bra{y} &=& y \\
+% \ea
+% $$
+% \end{minipage}\hspace{1ex}%
+
+% \end{figure}
+% \clearpage
+
+% standard interpretation and translation
+\section{Standard Interpretation and Transformation}
+% \subsection{Standard Metacircular Interpretation}
+% \vspace{-2ex}
+% \begin{figure}[h]
+% $$\footnotesize
+% \ba{rll}
+% % \textbf{Standard Metacircular Interpretation:} \\
+% \bra{.}: && \Exp \rightarrow \Env \rightarrow \Val\\
+% \bra{ c }_\rho         &=& c\\
+% \bra{ x }_\rho         &=& \At \rho \ x \\
+% \bra{ e_1 + e_2 }_\rho &=& \bra{ e_1 }_\rho + \bra{ e_2 }_\rho \\
+% \bra{ e_1 * e_2 }_\rho &=& \bra{ e_1 }_\rho * \bra{ e_2 }_\rho \\
+% \bra{ \lambda y. \ e }_\rho &=& \lambda \tilde y. \ \bra{e}_{\rho[y \mapsto \tilde y]} \\
+% \bra{ \At e_1 \ e_2}_\rho        &=& \At \bra{e_1}_\rho \ \bra{e_2}_\rho \\
+% \bra{\Let{y}{e_1} e_2}_\rho &=& \Let{\tilde y}{\bra{e_1}_\rho} \bra{e_2}_{\rho[y \mapsto \tilde y]} \\
+% \bra{\Fst{e}}_\rho               &=& \Fst{\bra{e}}_\rho \\
+% \bra{\Snd{e}}_\rho               &=& \Snd{\bra{e}}_\rho \\
+% \bra{\Ref{e}}_\rho               &=& \Ref{\bra{e}}_\rho \\
+% \bra{! \ e}_\rho                 &=& ! \ {\bra{e}}_\rho \\
+% \bra{e_1 := e_2}_\rho            &=& \bra{e_1}_\rho := \bra{e_2}_\rho \\
+% \bra{(e_1, e_2)}_\rho            &=& (\bra{e_1}_\rho, \bra{e_2}_\rho) \\
+% \bra{\Left{e}{\tau}}_\rho        &=& \Left{\bra{e}_\rho}{\tau} \\
+% \bra{\Right{\tau}{e}}_\rho       &=& \Right{\tau}{\bra{e}_\rho} \\
+% \bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}}_\rho
+% &=& \Pat{\bra{e}_\rho}{\tilde y_1}{\bra{e_1}_{\rho [y_1 \mapsto {\tilde y_1}]}}
+%                       {\tilde y_2}{\bra{e_2}_{\rho [y_2 \mapsto {\tilde y_2}]}} \\
+% \bra{\Shift{k}{e}}_\rho &=& \Shift{\tilde k}{\bra{e}_{\rho[k \mapsto \tilde k]}}\\
+% \bra{\Res{e}}_\rho      &=& \Res{\bra{e}_\rho}\\
+% \ea
+% $$
+% \end{figure}
+% \vspace{-4ex}
+% \flushleft
+% \begin{footnotesize}
+%   Here we show the standard metacircular interpretation of our formal language,
+%   to be contrasted with interpretation for AD in later figures.
+%   Since this interpretation is compositional, it can also be read as a translation.
+%   We observe that environments always map $y \mapsto {\tilde y}$, hence we can drop
+%   environments for the translation case and just use the name $y$ from the source
+%   expression in the target expression and add a case $\bra{x} = x$ (shown below).
+% \end{footnotesize}
+
+\subsection{Standard Metacircular Transformation}
+\vspace{-2ex}
+\begin{figure}[h]
+$$\footnotesize
+\ba{rll}
+% \textbf{Standard Metacircular Interpretation:} \\
+\bra{.}: && \Exp \rightarrow \Exp \\
+\bra{ c }         &=& c\\
+\bra{ x }         &=& x \\
+\bra{ e_1 + e_2 } &=& \bra{ e_1 } + \bra{ e_2 } \\
+\bra{ e_1 * e_2 } &=& \bra{ e_1 } * \bra{ e_2 } \\
+\bra{ \lambda y. \ e } &=& \lambda y. \ \bra{e} \\
+\bra{ \At e_1 \ e_2}   &=& \At \bra{e_1} \ \bra{e_2} \\
+\bra{\Let{y}{e_1} e_2} &=& \Let{y}{\bra{e_1}} \bra{e_2} \\
+\bra{\Fst{e}}               &=& \Fst{\bra{e}} \\
+\bra{\Snd{e}}               &=& \Snd{\bra{e}} \\
+\bra{\Ref{e}}               &=& \Ref{\bra{e}} \\
+\bra{! \ e}                 &=& ! \ {\bra{e}} \\
+\bra{e_1 := e_2}            &=& \bra{e_1} := \bra{e_2} \\
+\bra{(e_1, e_2)}            &=& (\bra{e_1}, \bra{e_2}) \\
+\bra{\Left{e}}        &=& \Left{\bra{e}} \\
+\bra{\Right{e}}       &=& \Right{\bra{e}} \\
+% \bra{\Left{e}{\tau}}        &=& \Left{\bra{e}}{\tau} \\
+% \bra{\Right{\tau}{e}}       &=& \Right{\tau}{\bra{e}} \\
+\bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}} &=& \Pat{\bra{e}}{y_1}{\bra{e_1}}{y_2}{\bra{e_2}} \\
+\bra{\Shift{k}{e}} &=& \Shift{k}{\bra{e}}\\
+\bra{\Res{e}}      &=& \Res{\bra{e}}\\
+\ea
+$$
+\end{figure}
+
+\flushleft
+\begin{footnotesize}
+Here we show the standard metacircular transformation using
+% This metacircular transformation uses
+shift/reset in the target language.
+But what if we want to use a target language that does not provide shift/reset operators?
+This can be achieved by moving the uses of shift/reset into the meta-language (so that they
+are used at the time of translation), and generating
+target terms in explicit CPS (without shift/reset).
+\end{footnotesize}
+\clearpage
+
+\subsection{Standard CPS Transformation using shift/reset}
+\vspace{-2ex}
+\begin{figure}[h]
+$$\footnotesize
+\ba{rll}
+% \textbf{Standard CPS Transformation using shift/reset:}\\
+\bra{.}: && \Exp \rightarrow \Exp \\
+\bra{ c }         &=& c \\
+\bra{ x }         &=& x \\
+\bra{ e_1 + e_2 } &=& \bra{e_1} \ \underline{+} \ \bra{e_2} \\
+\bra{ e_1 * e_2 } &=& \bra{e_1} \ \underline{*} \ \bra{e_2} \\
+\bra{ \lambda y. \ e } &=& \underline \lambda y. \underline \lambda k. \ \SRes{\Wat k \ \bra{e}} \\
+\bra{ \ \At e_1 \ e_2} &=& \SShift{k}{\Dat (\Dat \bra{e_1} \bra{e_2})(\WLam a. \Sat k \ a)} \\
+\#  \ \ \ \bra{\Let{y}{e_1} e_2} &=& \SShift{k}{\DLet{y}{\bra{e_1}}{\SRes{\Sat k \ \bra{e_2}}}}  \\
+% \bra{\Let{y^\tau}{e_1} e_2} &=& \SShift{k}{\DLet{y_1^\tau}{\bra{e_1}}{\SRes{\Sat k \ \bra{e_2[y \leftarrow y_1]}}}} \\
+\bra{\Fst{e}} &=& \DFst{\bra{e}} \\
+\bra{\Snd{e}} &=& \DSnd{\bra{e}} \\
+\bra{\Ref{e}} &=& \DRef{\bra{e}} \\
+\bra{! \ {e}} &=& \underline{!} \ \bra{e} \\
+\bra{e_1 := e_2} &=& \bra{e_1} \ \underline{:=} \ \bra{e_2} \\
+\bra{(e_1, e_2)} &=& \DPair{\bra{e_1}}{\bra{e_2}} \\
+\bra{\Left{e}}  &=& \DLeft{\bra{e}}  \\
+\bra{\Right{e}} &=& \DRight{\bra{e}} \\
+\bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}} &=& \SShift{k}{\WLet{k_1}{\WLam a. \ \Sat k \ a}\\
+                                   && \DPat{\bra{e}}{y_1}{\SRes{\Wat k_1 \ \bra{e_1}}}{y_2}{\SRes{\Wat k_1 \ \bra{e_2}}}} \\
+\#  \ \ \ \bra{\Shift{k}{e}} &=& \SShift{k_1}{\DLet{k}{\underline \lambda v. \ \underline \lambda k_2. \ \Dat k_2 (\Sat k_1 \ v)}{\SRes{\bra{e}}}} \\
+\bra{\Res{e}} &=& \SRes{\bra{e}} \\
+\ea
+$$
+\end{figure}
+\flushleft
+\begin{footnotesize}
+Here we show the standard CPS transformation using shift/reset.
+The rules are adapted from~\citet{DBLP:journals/mscs/DanvyF92}, and the \# symbol denotes rules
+that are simplified due to Barendregt's variable convention.
+We also adopted the overline/underline notation from~\citet{DBLP:journals/mscs/DanvyF92},
+such that overline denotes static/meta-language constructs,
+and underline denotes dynamic/target-language constructs.
+Departing slightly from~\citet{DBLP:journals/mscs/DanvyF92}, we introduce 
+another \textbf{wavy underline notation} to implement proper tail calls.
+Wavy underline denotes target-language terms just as normal underline, but 
+wavy terms will be normalized with respect to the following contraction 
+rules while the target expression is built up:
+$$
+\ba{rll}
+\WLam y. \ \Wat e \ y &\rightarrow& e \\
+\WLet{y}{y_1} e &\rightarrow& e [y \leftarrow y_1]\\
+\ea
+$$
+
+\flushleft
+Note that the wavy underline notation for let means that let-bindings should be
+removed if and only if the RHS of the let-binding is just a variable (symbol).
+This rule not strictly necessary for properly tail-recursive calls, but it removes
+unnecessary symbol bindings for case expression in abstraction.
+
+Note that we don't need to model ``code types'', because
+we assume that object-level ASTs are modeled as proper tree types,
+using recursive types, products, and sums.
+\end{footnotesize}
+
+
+\clearpage
+
+% standard interpretation and translation
+\subsection{Standard CPS Transformation}
+\flushleft
+\begin{footnotesize}
+It is of course also possible to express the CPS transformation without shift/reset entirely by
+switching the meta-languge code to CPS. This can be achieved formally by applying the same 
+transformation as above to the meta-language translation code. The result is that shift/reset 
+are fully erased from the right-hand sides of the translation.
+\end{footnotesize}
+
+\begin{figure}[h]
+$$\footnotesize
+\ba{rll}
+% \textbf{Standard CPS Transformation:}\\
+\bra{.}: && \Exp \rightarrow \Exp \\
+\bra{ c }         &=& \overline \lambda \kappa.\ \Sat \kappa \ c\\
+\bra{ x }         &=& \overline \lambda \kappa.\ \Sat \kappa \ x \\
+\bra{ e_1 + e_2 } &=& \overline \lambda \kappa.\ \Sat \bra{e_1}(\overline \lambda y_1.\ \Sat \bra{e_2}(\overline \lambda y_2.\
+                      \Sat \kappa (y_1 \ \underline{+} \ y_2))) \\
+\bra{ e_1 * e_2 } &=& \overline \lambda \kappa.\ \Sat \bra{e_1}(\overline \lambda y_1.\ \Sat \bra{e_2}(\overline \lambda y_2.\
+                      \Sat \kappa (y_1 \ \underline{*} \ y_2))) \\
+\bra{ \lambda y. \ e } &=& \overline \lambda \kappa. \ \Sat \kappa \ (\underline \lambda y. \ \underline \lambda k.
+                                                          \ \Sat \bra{e} \ (\SLam m. \Wat k \ m )) \\
+\bra{ \ \At e_1 \ e_2}
+&=& \overline \lambda \kappa. \ \Sat \bra{e_1}(\overline \lambda m. \ \Sat \bra{e_2}(\overline \lambda n. \
+    \Dat (\ \Dat m \ n) \ (\WLam a. \ \Sat \kappa \ a))) \\
+\#  \ \ \ \bra{\Let{y}{e_1} e_2}
+&=& \overline \lambda \kappa. \ \Sat \bra{e_1}(\overline \lambda y_1. \ \DLet{y}{y_1} \Sat \bra{e_2} \ \kappa) \\
+\bra{\Fst{e}} &=& \overline \lambda \kappa. \ \Sat \bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DFst{y})) \\
+\bra{\Snd{e}} &=& \overline \lambda \kappa. \ \Sat \bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DSnd{y})) \\
+\bra{\Ref{e}} &=& \overline \lambda \kappa. \ \Sat \bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DRef{y})) \\
+\bra{! \ {e}}         &=& \overline \lambda \kappa. \ \Sat \bra{e}(\overline \lambda y. \ \Sat \kappa \ (\underline ! \ {y})) \\
+\bra{e_1 := e_2} &=& \overline \lambda \kappa. \ \Sat \bra{e_1}(\overline \lambda y_1. \ \Sat \bra{e_2}
+   (\overline \lambda y_2. \ \Sat \kappa \ ( y_1 \ \underline{:=} \ y_2))) \\
+\bra{(e_1, e_2)} &=& \overline \lambda \kappa. \ \Sat \bra{e_1}(\overline \lambda y_1. \ \Sat \bra{e_2}
+   (\overline \lambda y_2. \ \Sat \kappa \ (\DPair{y_1}{y_2}))) \\
+\bra{\Left{e}}  &=& \overline \lambda \kappa. \ \Sat \bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DLeft{y})) \\
+\bra{\Right{e}} &=& \overline \lambda \kappa. \ \Sat \bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DRight{y})) \\
+\bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}}
+&=& \overline \lambda \kappa. \ \WLet{k}{\WLam a. \ \Sat \kappa \ a} \Sat \bra{e}(\overline \lambda v. \\
+                          && \DPat{v}{y_1}{\Sat \bra{e_1} (\SLam m. \ \Wat k \ m)}
+                                     {y_2}{\Sat \bra{e_2} (\SLam n. \ \Wat k \ n)}) \\
+\#  \ \ \ \bra{\Shift{k}{e}} &=& \overline \lambda \kappa. \ \DLet{k}{\underline \lambda a. \underline \lambda \kappa_1. \
+     \Dat \kappa_1 (\Sat \kappa \ a)}{\Sat \bra{e}(\overline \lambda m. m)} \\
+\bra{\Res{e}} &=& \overline \lambda \kappa. \Sat \kappa (\Sat \bra{e}(\overline \lambda m. m))\\
+% \textbf{Properly tail-recursive:}\\
+% \bra{ c }'         &=& \overline \lambda k.\ \Dat k \ c\\
+% \bra{ x }'         &=& \overline \lambda k.\ \Dat k \ x \\
+% \bra{ e_1 + e_2 }' &=& \overline \lambda k.\ \Sat \bra{e_1}(\overline \lambda y_1.\ \Sat \bra{e_2}(\overline \lambda y_2.\
+%                       \Dat k (y_1 \ \underline{+} \ y_2))) \\
+% \bra{ e_1 * e_2 }' &=& \overline \lambda k.\ \Sat \bra{e_1}(\overline \lambda y_1.\ \Sat \bra{e_2}(\overline \lambda y_2.\
+%                       \Dat k (y_1 \ \underline{*} \ y_2))) \\
+% \bra{ \lambda y^\tau. \ e }' &=& \overline \lambda k. \ \Dat k \ (\underline \lambda y^\tau. \ \underline \lambda k.
+%                                                       \ \Sat \bra{e}' k) \\
+% \bra{ \ \At e_1 \ e_2}'
+% &=& \overline \lambda k. \ \Sat \bra{e_1}(\overline \lambda m. \ \Sat \bra{e_2}(\overline \lambda n. \
+%     \Dat (\ \Dat m \ n) \ k)) \\
+% \bra{\Let{y^\tau}{e_1} e_2}'
+% &=& \overline \lambda k. \ \Sat \bra{e_1}(\overline \lambda y^\tau. \ \Sat \bra{e_2}' \ k) \\
+% % &=& \overline \lambda k. \ \Sat \bra{e_1}(\overline \lambda y_1^\tau. \ \DLet{\tilde y}{y_1} \Sat \bra{e_2[y \leftarrow \tilde y]}' \ k) \\
+% \bra{\Fst{e}}' &=& \overline \lambda k. \ \Sat \bra{e}(\overline \lambda y. \ \Dat k \ (\DFst{y})) \\
+% \bra{\Snd{e}}' &=& \overline \lambda k. \ \Sat \bra{e}(\overline \lambda y. \ \Dat k \ (\DSnd{y})) \\
+% \bra{\Ref{e}}' &=& \overline \lambda k. \ \Sat \bra{e}(\overline \lambda y. \ \Dat k \ (\DRef{y})) \\
+% \bra{! \ {e}}' &=& \overline \lambda k. \ \Sat \bra{e}(\overline \lambda y. \ \Dat k \ (\underline ! \ {y})) \\
+% \bra{e_1 := e_2}' &=& \overline \lambda k. \ \Sat \bra{e_1}(\overline \lambda y_1. \ \Sat \bra{e_2}
+%    (\overline \lambda y_2. \ \Dat k \ ( y_1 \ \underline{:=} \ y_2))) \\
+% \bra{(e_1, e_2)}' &=& \overline \lambda k. \ \Sat \bra{e_1}(\overline \lambda y_1. \ \Sat \bra{e_2}
+%    (\overline \lambda y_2. \ \Dat k \ (\DPair{y_1}{y_2}))) \\
+% \bra{\Left{e}{\tau}}'  &=& \overline \lambda k. \ \Sat \bra{e}(\overline \lambda y. \ \Dat k \ (\DLeft{y}{\tau})) \\
+% \bra{\Right{e}{\tau}}' &=& \overline \lambda k. \ \Sat \bra{e}(\overline \lambda y. \ \Dat k \ (\DRight{\tau}{y})) \\
+% \bra{\Pat{e_1}{y}{e_2}{z}{e_3}}'
+% &=& \overline \lambda k. \ \Sat \bra{e_1}(\overline \lambda v. \ \DPatL{v}
+%                              {y}{\Sat \bra{e_2}' k}
+%                              {z}{\Sat \bra{e_3}' k}) \\
+%                              % {y_1}{\DLet{\tilde y}{y_1} \Sat \bra{e_2[y \leftarrow \tilde y]}' k}
+%                              % {z_1}{\DLet{\tilde z}{z_1} \Sat \bra{e_3[z \leftarrow \tilde z]}' k}) \\
+% \bra{\Shift{k}{e}}' &=& \overline \lambda k. \ \DLet{k_1}{\underline \lambda a. \underline \lambda \kappa_1. \
+%      \Dat \kappa_1 (\Dat k \ a)}{\Sat \bra{e[k \leftarrow k_1]}(\overline \lambda m. m)} \\
+% \bra{\Res{e}}' &=& \overline \lambda k. \Dat k (\Sat \bra{e}(\overline \lambda m. m))\\
+\ea
+$$
+\end{figure}
+\vspace{-2ex}
+\flushleft
+\begin{footnotesize}
+Here we show the standard CPS transformation without using shift/reset.
+Similar to the figure before, rules and overline/underline notations are adapted from~\citet{DBLP:journals/mscs/DanvyF92}.
+The \# symbol still denotes rules that are simplified due to Barendregt's variable convention,
+and we use the same wavy underline notation to handle properly tail-recursive calls.
+\end{footnotesize}
+\vspace{2ex}
+
+
+\clearpage
+\section{Forward-mode AD}
+
+\flushleft
+\begin{footnotesize}
+For AD (both forward-mode and reverse-mode), %interpretation and transformation),
+we use the following variable sugaring with $\hat .$ notation. % and type transformation.
+Note that the variable sugaring is not strictly necessary but we find it convenient
+for $+$ and $*$ rules. Also note that this variable sugaring are always used
+at position where we know for sure that the
+sugared variables bind with Real typed values, so that they must have gradients
+(denoted via variables with ').
+
+% to highlight the type changes for bound variables. \\
+
+Also note that for AD (both forward-mode and reverse-mode), we drop shift/reset terms
+from the source language, since the focus is to provide a semantics for AD in a 
+standard language, and shift/reset will play a crucial role for the semantics
+of AD in reverse mode.
+
+Note that our AD supports mutable states in the source language.
+% \vspace{-2ex}
+% \begin{multicols}{2}
+$$
+\ba{rll}
+\textbf{Variable Sugaring:} \ \hat y &=& (y, y') \\ % \text{variable}\\
+         %            \hat y^\RR &=& (y, y')^{\RR \times \RR} \\ % \text{variable}\\
+         % \hat y^{\tau \ne \RR} &=& y^{\brt\bra{\tau}} \\
+% \textbf{Type Transformation:}\\
+%     \brt\bra{\UNIT} &=& \UNIT\\
+%     \brt\bra{\RR}               &=& \RR \times \RR\\
+% \ea
+% $$
+% \columnbreak
+% $$
+% \ba{rll}
+% \\
+%     \brt\bra{\REF \tau} &=& \REF \brt\bra{\tau} \\
+%     \brt\bra{\tau_1 \times \tau_2} &=& \brt\bra{\tau_1} \times \brt\bra{\tau_2} \\
+%     \brt\bra{\tau_1 \rightarrow \tau_2} &=& \brt\bra{\tau_1} \rightarrow \brt\bra{\tau_2} \\
+%     \brt\bra{\tau_1 + \tau_2} &=& \brt\bra{\tau_1} + \brt\bra{\tau_2} \\
+%     \brt\bra{\mu y. \tau} &=& \mu y. \brt\bra{\tau} \\
+%     \brt\bra{y} &=& y \\
+\ea
+$$
+% \end{multicols}
+\end{footnotesize}
+
+% \subsection{Forward-mode AD Interpretation}
+% \begin{figure}[h]
+% $$\footnotesize
+% \ba{rll}
+% % \textbf{Forward Mode AD Interpretation:} \\
+
+% \texttt{Interpret}(f^{\RR \rightarrow \RR}) &=& \lambda x^\RR. \ \Let{\hat x}{(x, 1)} \\
+%                        && \quad \quad \ \ \Let{\hat y}{\At \bro\bra{f}_\emptyset \ \hat x} \\
+%                        && \quad \quad \ \ \ y' \\
+% % \text{transformation:}\\
+% \texttt{where} \ \bro \bra{.}: && \Exp \rightarrow \Env \rightarrow \Val \ \ \ \text{is defined as below:} \\
+% \\
+% \bro \bra{c^{\tau \neq \RR}}_\rho &=& c^\tau \\
+% \bro \bra{c^{\RR}}_\rho           &=& \Red{(c, 0)^{\RR \times \RR}} \\
+% \bro \bra{x}_\rho           &=& \At \rho \ x \\
+% \bro \bra{y}_\rho            &=& \At \rho \ y \\
+
+% \bro \bra{e_1 + e_2}_\rho &=&
+%         \Blue{\Let{\hat y_1}{\bro\bra{e_1}_\rho}}\\
+% \ \ \ &&\Blue{\Let{\hat y_2}{\bro\bra{e_2}_\rho}}\\
+% \ \ \ &&\Blue{(y_1 + y_2, y_1' + y_2')} \\
+% \bro \bra{e_1 * e_2}_\rho &=&
+%         \Blue{\Let{\hat y_1}{\bro\bra{e_1}_\rho}} \\
+% \ \ \ &&\Blue{\Let{\hat y_2}{\bro\bra{e_2}_\rho}} \\
+% \ \ \ &&\Blue{(y_1 * y_2, y_1 * y_2' + y_1' * y_2)} \\
+% \bro \bra{\lambda y. \ e}_\rho &=& \lambda \Red{\hat y_1}. \ \bro\bra{e}_{\rho[y \mapsto \hat y_1]} \\
+% \bro \bra{\At e_1 \ e_2}_\rho &=& \At \bro \bra{e_1}_\rho \ \bro \bra{e_2}_\rho \\
+% \bro \bra{\Let{y}{e_1} \ e_2}_\rho &=&
+%  \Let{\Red{\hat y_1}}{\bro\bra{e_1}_\rho} \ \bro\bra{e_2}_{\rho[y \mapsto \hat y_1]} \\
+% \bro\bra{\Fst e}_\rho &=& \Fst{\bro\bra e}_\rho \\
+% \bro\bra{\Snd e}_\rho &=& \Snd{\bro\bra e}_\rho \\
+% \bro\bra{\Ref e}_\rho &=& \Ref{\bro\bra e}_\rho \\
+% \bro\bra{! \ e}_\rho  &=& \ ! \ \bro\bra{e}_\rho \\
+% \bro\bra{e_1 := e_2}_\rho &=& \bro\bra{e_1}_\rho := \bro\bra{e_2}_\rho \\
+% \bro\bra{(e_1, e_2)}_\rho &=& (\bro\bra{e_1}_\rho, \bro\bra{e_2}_\rho) \\
+% \bro\bra{\Left{e}{\tau}}_\rho &=& \Left{\bro\bra{e}_\rho}{\brt\bra{\tau}} \\
+% \bro\bra{\Right{\tau}{e}}_\rho&=& \Right{\brt\bra{\tau}}{\bro\bra{e}_\rho} \\
+% \bro\bra{\Pat{e}{y}{e_1}{z}{e_2}}_\rho &=&
+%     \Pat{\bro\bra{e}_\rho}{\Red{\hat y_1}}{\bro\bra{e_1}_{\rho[y \mapsto \hat y_1]}}
+%                           {\Red{\hat z_1}}{\bro\bra{e_2}_{\rho[z \mapsto \hat z_1]}} \\
+% \ea
+% $$
+% \end{figure}
+% \flushleft
+% \begin{footnotesize}
+% Here we show the interpretation for forward-mode AD.
+% Note the differences from standard interpretation, which are highlighted by color.
+% Differences due to introduction of gradient field and type transformation are labeled in red.
+% Differences due to gradient computation and let-bindings are labeled in blue.
+% \end{footnotesize}
+% \clearpage
+
+
+\subsection{Forward-mode AD Transformation}
+\begin{footnotesize}
+\begin{figure}[h]
+$$
+\ba{rll}
+% \textbf{Forward Mode AD Transformation:} \\
+\texttt{Transform}(f) &=& \lambda x. \ \Let{\hat y}{\At \bro\bra{f} \ (x, 1)} \ y' \\
+% \texttt{Transform}(f) &=& \lambda x. \ \Let{\hat x}{(x, 1)} \\
+%                        && \quad \quad \ \ \Let{\hat y}{\At \bro\bra{f} \ \hat x} \\
+%                        && \quad \quad \ \ \ y' \\
+% \text{transformation:}\\
+\texttt{where} \ \bro \bra{.}: && \Exp \rightarrow \Exp \ \ \ \text{is defined as below:} \\
+\\
+\bro \bra{c}.        &=& c  \ \ \text{if} \ c \notin \RR \\
+\bro \bra{c=}        &=& \Red{(c, 0)} \ \ \text{if} \ c \in \RR \\
+% \bro \bra{x}         &=& x \\
+\bro \bra{y}         &=& y \\
+\bro \bra{e_1 + e_2} &=&
+        \Blue{\Let{\hat y_1}{\bro\bra{e_1}}}\\
+\ \ \ &&\Blue{\Let{\hat y_2}{\bro\bra{e_2}}}\\
+\ \ \ &&\Blue{(y_1 + y_2, y_1' + y_2')} \\
+\bro \bra{e_1 * e_2} &=&
+        \Blue{\Let{\hat y_1}{\bro\bra{e_1}}} \\
+\ \ \ &&\Blue{\Let{\hat y_2}{\bro\bra{e_2}}} \\
+\ \ \ &&\Blue{(y_1 * y_2, y_1 * y_2' + y_1' * y_2)} \\
+\bro \bra{\lambda y. \ e} &=& \lambda y. \ \bro \bra{e} \\
+\bro \bra{\At e_1 \ e_2} &=& \At \bro\bra{e_1} \ \bro\bra{e_2} \\
+\bro \bra{\text{let} \ y = e_1 \ \text{in} \ e_2} &=&
+ \Let{y}{\bro\bra{e_1}} \bro\bra{e_2} \\
+\bro\bra{\Fst e} &=& \Fst{\bro\bra e} \\
+\bro\bra{\Snd e} &=& \Snd{\bro\bra e} \\
+\bro\bra{\Ref e} &=& \Ref{\bro\bra e} \\
+\bro\bra{! \ e}  &=& \ ! \ \bro\bra{e} \\
+\bro\bra{e_1 := e_2} &=& \bro\bra{e_1} := \bro\bra{e_2} \\
+\bro\bra{(e_1, e_2)} &=& (\bro\bra{e_1}, \bro\bra{e_2}) \\
+\bro\bra{\Left{e}} &=& \Left{\bro\bra{e}} \\
+\bro\bra{\Right{e}}&=& \Right{\bro\bra{e}} \\
+\bro\bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}} &=&
+    \Pat{\bro\bra{e}}{y_1}{\bro\bra{e_1}}{y_2}{\bro\bra{e_2}} \\
+\ea
+$$
+\end{figure}
+\vspace{-2ex}
+\flushleft
+Here we show the transformation for forward-mode AD.
+% As in the standard metacircular interpretation and transformation, the only difference is in the use of environments.
+Note that there is no metalanguage redex generated in the transformation,
+so we elide underline denotations here, and by default let all constructs on the RHS be dynamic/target language constructs.
+Rules that are different from standard transformation are highlighted by color.
+% with red labeling differences due to introduction of gradient field,
+% and blue labeling differences due to gradient computation and let-bindings.
+\end{footnotesize}
+\vspace{2ex}
+
+\clearpage
+\section{Reverse-mode AD}
+
+% \flushleft
+% \begin{footnotesize}
+% For reverse-mode AD (both interpretation and transformation),
+% we use the following variable sugaring with $\hat .$ notation and the following type transformation.
+% Note that variable sugaring is not strictly necessary, but we find it helpful to highlight the type changes for bound variables.
+% Note: type transformation for function types is valid for CPS, not shift/reset
+% \vspace{-4ex}
+% \begin{multicols}{2}
+% $$\footnotesize
+% \ba{rll}
+% \textbf{Variable Sugaring:} \\
+%                     \hat y^\RR &=& (y, y')^{\NUM} \\ % \text{variable}\\
+%          \hat y^{\tau \ne \RR} &=& y^{\ort\bra{\tau}} \\
+% \textbf{Type Transformation:}\\
+%     \ort\bra{\UNIT} &=& \UNIT\\
+%     \ort\bra{\RR} &=& \NUM\\
+% \ea
+% $$
+% \columnbreak
+% $$\footnotesize
+% \ba{rll}
+% \\
+%     \ort\bra{\REF \tau} &=& \REF \ort\bra{\tau} \\
+%     \ort\bra{\tau_1 \times \tau_2} &=& \ort\bra{\tau_1} \times \ort\bra{\tau_2} \\
+%     \ort\bra{\tau_1 \rightarrow \tau_2} &=& \ort\bra{\tau_1} \rightarrow (\ort\bra{\tau_2} \rightarrow \UNIT) \rightarrow \UNIT \\
+%     \ort\bra{\tau_1 + \tau_2} &=& \ort\bra{\tau_1} + \ort\bra{\tau_2} \\
+%     \ort\bra{\mu y. \tau} &=& \mu y. \ort\bra{\tau} \\
+%     \ort\bra{y} &=& y \\
+% \ea
+% $$
+% \end{multicols}
+% \end{footnotesize}
+% \begin{minipage}[t]{0.45\textwidth}
+% $$\footnotesize
+% \ba{rll}
+% \textbf{Variable Sugaring:} \\
+%                     \hat y^\RR &=& (y, y')^{\NUM} \\ % \text{variable}\\
+%          \hat y^{\tau \ne \RR} &=& y^{\ort\bra{\tau}} \\
+% \ea
+% $$
+% \end{minipage}\hspace{1ex}%
+% \begin{minipage}[t]{0.45\textwidth}
+% $$\footnotesize
+% \ba{rll}
+% \textbf{Type Transformation:}\\
+%     \ort\bra{\UNIT} &=& \UNIT\\
+%     \ort\bra{\RR} &=& \NUM\\
+%     \ort\bra{\REF \tau} &=& \REF \ort\bra{\tau} \\
+%     \ort\bra{\tau_1 \times \tau_2} &=& \ort\bra{\tau_1} \times \ort\bra{\tau_2} \\
+%     \ort\bra{\tau_1 \rightarrow \tau_2} &=& \ort\bra{\tau_1} \rightarrow (\ort\bra{\tau_2} \rightarrow \UNIT) \rightarrow \UNIT \\
+%     \ort\bra{\tau_1 + \tau_2} &=& \ort\bra{\tau_1} + \ort\bra{\tau_2} \\
+%     \ort\bra{\mu y. \tau} &=& \mu y. \ort\bra{\tau} \\
+%     \ort\bra{y} &=& y \\
+% \ea
+% $$
+% \end{minipage}\hspace{1ex}%
+% \clearpage
+% \vspace{-6ex}
+% \subsection{Reverse-mode AD Interpretation using shift/reset}
+% \vspace{-3ex}
+% \begin{figure}[h]
+% $$\footnotesize
+% \ba{rll}
+% % \textbf{Reverse Mode AD Interpretation}\\ \textbf{using shift/reset:} \\
+% \texttt{Interpret}(f^{\RR \rightarrow \RR}) &=& \lambda x^\RR. \ \Let{\hat x}{(x, \Ref 0)} \\
+%                        && \Res{\Snd{(\At \orb\bra{f}_{\emptyset}\ \hat x)} := 1.0 }; \\
+%                        && ! \ x' \\
+%      \texttt{where } \orb\bra{.}: && \Exp \rightarrow \Env \rightarrow \Val \ \ \ \text{is defined as below:} \\
+%      \\
+% \orb\bra{ c^{\tau \ne \RR} }_\rho &=& c\\
+% \orb\bra{ c^{\RR} }_\rho          &=& \Red{(c, \Ref 0)} \\
+% \orb\bra{ x }_\rho                &=& \At \rho \ x \\
+% \orb\bra{ y }_\rho                &=& \At \rho \ y \\
+% \orb\bra{ e_1 + e_2 }_\rho &=& \Blue{\Let{\hat y_1}{\orb\bra{e_1}_\rho}} \\
+%                        && \Blue{\Let{\hat y_2}{\orb\bra{e_2}_\rho}} \\
+%                        && \Blue{\texttt{shift } k \text{ in } \Let{\hat y}{(y_1 + y_2, \Ref 0)}} \\
+%                        && \Blue{\quad \quad \quad \quad \quad k \ \hat y;} \\
+%                        && \Blue{\quad \quad \quad \quad \quad y_1' \ \mathrel{+}= \ ! \ y';}\\
+%                        && \Blue{\quad \quad \quad \quad \quad y_2' \ \mathrel{+}= \ ! \ y'}\\
+% \orb\bra{ e_1 * e_2 }_\rho &=& \Blue{\Let{\hat y_1}{\orb\bra{e_1}_\rho}} \\
+%                        && \Blue{\Let{\hat y_2}{\orb\bra{e_2}_\rho}} \\
+%                        && \Blue{\texttt{shift } k \text{ in } \Let{\hat y}{(y_1 * y_2, \Ref 0)}} \\
+%                        && \Blue{\quad \quad \quad \quad \quad k \ \hat y;} \\
+%                        && \Blue{\quad \quad \quad \quad \quad y_1' \ \mathrel{+}= \ ! \ y' * y_2;}\\
+%                        && \Blue{\quad \quad \quad \quad \quad y_2' \ \mathrel{+}= \ ! \ y' * y_1}\\
+% \orb\bra{ \lambda y. \ e }_\rho &=& \lambda \Red{\hat y_1}. \ \orb\bra{e}_{\rho[y \mapsto \hat y_1]} \\
+% \orb\bra{\At e_1 \ e_2}_\rho            &=& \At \orb\bra{e_1}_\rho \ \orb\bra{e_2}_\rho \\
+% \orb\bra{\Let{y}{e_1} e_2}_\rho &=& \Let{\Red{\hat y_1}}{\orb\bra{e_1}_\rho} \orb\bra{e_2}_{\rho[y \mapsto \hat y_1]} \\
+% \orb\bra{\Fst{e}}_\rho &=& \Fst{\orb\bra{e}}_\rho \\
+% \orb\bra{\Snd{e}}_\rho &=& \Snd{\orb\bra{e}}_\rho \\
+% \orb\bra{\Ref{e}}_\rho &=& \Ref{\orb\bra{e}}_\rho \\
+% \orb\bra{! \ e}_\rho &=& ! \ {\orb\bra{e}}_\rho \\
+% \orb\bra{e_1 := e_2}_\rho &=& \orb\bra{e_1}_\rho := \orb\bra{e_2}_\rho \\
+% \orb\bra{(e_1, e_2)}_\rho &=& (\orb\bra{e_1}_\rho, \orb\bra{e_2}_\rho) \\
+% \orb\bra{\Left{e}{\tau}}_\rho &=& \Left{\orb\bra{e}_\rho}{\ort\bra{\tau}} \\
+% \orb\bra{\Right{\tau}{e}}_\rho &=& \Right{\ort\bra{\tau}}{\orb\bra{e}_\rho} \\
+% \orb\bra{\Pat{e}{y}{e_1}{z}{e_2}}_\rho
+% &=& \PatL{\orb\bra{e}_\rho}{\Red{\hat y_1}}{\orb\bra{e_1}_{\rho [y \mapsto {\hat y_1}]}}
+%                            {\Red{\hat z_1}}{\orb\bra{e_2}_{\rho [z \mapsto {\hat z_1}]}} \\
+% \ea
+% $$
+% \end{figure}
+% \vspace{-3ex}
+% \flushleft
+% \begin{footnotesize}
+%   Interpretation of reverse-mode AD with shift/reset and mutable state in the metalanguage.
+%   Rules that are different from standard interpretation due to adding gradient field and type transformation
+%   are labeled in red. Rules that are different from standard interpretation due to gradient computation are
+%   labeled in blue.
+% \end{footnotesize}
+% \clearpage
+
+\subsection{Reverse-mode AD Transformation using Target-Language shift/reset}
+\vspace{-3ex}
+\begin{figure}[h]
+$$\footnotesize
+\ba{rll}
+% \textbf{Reverse Mode AD Interpretation}\\ \textbf{using shift/reset:} \\
+\texttt{Transform}(f) &=& \lambda x. \ \Let{\hat x}{(x, \Ref 0)} \\
+                       && \quad \ \ \ \Res{\Let{\hat z}{\At \orb\bra{f}\ \hat x} z' := 1.0}; \\
+                       % && \Res{\Snd{(\At \orb\bra{f}\ \hat x)} := 1.0 }; \\
+                       && \quad \ \ \ ! \ x' \\
+     \texttt{where } \orb\bra{.}: && \Exp \rightarrow \Exp \ \ \ \text{is defined as below:} \\
+     \\
+\orb\bra{ c }         &=& c \ \ \text{if} \ c \notin \RR\\
+\orb\bra{ c }         &=& \Red{(c, \Ref 0)}  \ \ \text{if} \ c \in \RR\\
+% \orb\bra{ x }         &=& x\\
+\orb\bra{ y }         &=& y \\
+\orb\bra{ e_1 + e_2 } &=& \Blue{\Let{\hat y_1}{\orb\bra{e_1}}} \\
+                       && \Blue{\Let{\hat y_2}{\orb\bra{e_2}}} \\
+                       && \Blue{\texttt{shift } k \text{ in } \Let{\hat y}{(y_1 + y_2, \Ref 0)}} \\
+                       && \Blue{\quad \quad \quad \quad \quad \At k \ \hat y;} \\
+                       && \Blue{\quad \quad \quad \quad \quad y_1' \ \mathrel{+}= \ ! \ y';}\\
+                       && \Blue{\quad \quad \quad \quad \quad y_2' \ \mathrel{+}= \ ! \ y'}\\
+\orb\bra{ e_1 * e_2 } &=& \Blue{\Let{\hat y_1}{\orb\bra{e_1}}} \\
+                       && \Blue{\Let{\hat y_2}{\orb\bra{e_2}}} \\
+                       && \Blue{\texttt{shift } k \text{ in } \Let{\hat y}{(y_1 * y_2, \Ref 0)}} \\
+                       && \Blue{\quad \quad \quad \quad \quad \At k \ \hat y;} \\
+                       && \Blue{\quad \quad \quad \quad \quad y_1' \ \mathrel{+}= \ ! \ y' * y_2;}\\
+                       && \Blue{\quad \quad \quad \quad \quad y_2' \ \mathrel{+}= \ ! \ y' * y_1}\\
+\orb\bra{ \lambda y. \ e } &=& \lambda y. \ \orb\bra{e} \\
+\orb\bra{\At e_1 \ e_2}            &=& \At \orb\bra{e_1} \ \orb\bra{e_2} \\
+\orb\bra{\Let{y}{e_1} e_2} &=& \Let{y}{\orb\bra{e_1}} \orb\bra{e_2} \\
+\orb\bra{\Fst{e}} &=& \Fst{\orb\bra{e}} \\
+\orb\bra{\Snd{e}} &=& \Snd{\orb\bra{e}} \\
+\orb\bra{\Ref{e}} &=& \Ref{\orb\bra{e}} \\
+\orb\bra{! \ e} &=& ! \ {\orb\bra{e}} \\
+\orb\bra{e_1 := e_2} &=& \orb\bra{e_1} := \orb\bra{e_2} \\
+\orb\bra{(e_1, e_2)} &=& (\orb\bra{e_1}, \orb\bra{e_2}) \\
+\orb\bra{\Left{e}} &=& \Left{\orb\bra{e}} \\
+\orb\bra{\Right{e}} &=& \Right{\orb\bra{e}} \\
+\orb\bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}}
+&=& \Pat{\orb\bra{e}}{y_1}{\orb\bra{e_1}}{y_2}{\orb\bra{e_2}} \\
+\ea
+$$
+\end{figure}
+\vspace{-3ex}
+\flushleft
+\begin{footnotesize}
+  Transformation of reverse-mode AD with shift/reset and mutable state in the target language
+  (identical to interpretation except for handling of environments).
+  Rules that are different from standard transformation are highlighted by color.
+  %  due to adding gradient field
+  % are labeled in red. Rules that are different from standard transformation due to gradient computation are
+  % labeled in blue.
+\end{footnotesize}
+\clearpage
+
+
+
+\subsection{Reverse-mode AD Transformation using Meta-Language Shift/Reset}
+
+\begin{figure}[h]
+$$\footnotesize
+\ba{rll}
+% \textbf{Reverse Mode AD Transformation}\\
+% \textbf{using Shift/Reset:} \\
+\texttt{Transform}(f) &=& \underline \lambda x. \ \DLet{\hat x}{\DPair{x}{\DRef 0}} \\
+                       % && \quad \ \ \ \SRes{\DLet{\hat z}{\Sat \orb\bra{f} \ \hat x}\ z' \ \underline{:=}\ 1.0} \underline{;} \\
+                       && \quad \quad \Dat (\Dat \orb\bra{f} \ \hat x) \ (\WLam z. \ \DLet{\hat z}{z} z' \ \underline{:=}\ 1.0) \underline{;} \\
+                       % && \quad \quad \ \ \SRes{\DSnd{(\Sat \orb\bra{f} \ \hat x)}\ \underline{:=}\ 1.0} \underline{;} \\
+                       && \quad \ \ \ \DDref{x'} \ \\
+          \texttt{where } \orb\bra{.}: && \Exp \rightarrow \Exp \ \ \ \text{is defined as below:} \\
+                       \\
+\orb\bra{ c }         &=& c \ \ \text{if} \ c \notin \RR \\
+\orb\bra{ c }         &=& \Red{\DPair{c}{\DRef 0}} \ \ \text{if} \ c \in \RR \\
+% \orb\bra{ x }         &=& x\\
+\orb\bra{ y }         &=& y \\
+\orb\bra{ e_1 + e_2 } &=& \Blue{\SShift{k}{\DLet{\hat y_1}{\orb\bra{e_1}}}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\DLet{\hat y_2}{\orb\bra{e_2}}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\DLet{\hat y}{\DPair{\DAdd{y_1}{y_2}}{\DRef 0}}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\Sat k \ \hat y \underline{;}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\DUpdate{y_1'}{\DDref{y'}}\underline{;}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\DUpdate{y_2'}{\DDref{y'}}} \\
+\orb\bra{ e_1 * e_2 } &=& \Blue{\SShift{k}{\DLet{\hat y_1}{\orb\bra{e_1}}}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\DLet{\hat y_2}{\orb\bra{e_2}}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\DLet{\hat y}{\DPair{\DMul{y_1}{y_2}}{\DRef 0}}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\Sat k \ \hat y\underline{;}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\DUpdate{y_1'}{\DMul{\DDref{y'}}{y_2}}\underline{;}} \\
+                       && \quad \quad \quad \quad \ \ \ \Blue{\DUpdate{y_2'}{\DMul{\DDref{y'}}{y_1}}} \\
+\orb\bra{ \lambda y. \ e } &=& \underline \lambda y. \ \underline \lambda k.
+                                    \ \SRes{\Wat k \ \orb\bra{e}} \\
+\orb\bra{ \ \At e_1 \ e_2} &=& \SShift{k}{\Dat (\Dat \orb\bra{e_1} \orb\bra{e_2})(\WLam a. \Sat k \ a)} \\
+\#  \ \ \ \orb\bra{\Let{y}{e_1} e_2} &=& \SShift{k}{\DLet{y}{\orb\bra{e_1}}{\SRes{\Sat k \ \orb\bra{e_2}}}} \\
+\orb\bra{\Fst{e}} &=& \DFst{\orb\bra{e}} \\
+\orb\bra{\Snd{e}} &=& \DSnd{\orb\bra{e}} \\
+\orb\bra{\Ref{e}} &=& \DRef{\orb\bra{e}} \\
+\orb\bra{! \ {e}} &=& \DDref \orb\bra{e} \\
+\orb\bra{e_1 := e_2} &=& \orb\bra{e_1} \ \underline{:=} \ \orb\bra{e_2} \\
+\orb\bra{(e_1, e_2)} &=& \DPair{\orb\bra{e_1}}{\orb\bra{e_2}} \\
+\orb\bra{\Left{e}}  &=& \DLeft{\orb\bra{e}}  \\
+\orb\bra{\Right{e}} &=& \DRight{\orb\bra{e}} \\
+\orb\bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}} &=&
+     \SShift{k}{\WLet{k_1}{\WLam a. \ \Sat k \ a}\\
+  && \DPat{\orb\bra{e}}{y_1}{\SRes{\Wat k_1 \ \bra{e_1}}}
+                       {y_2}{\SRes{\Wat k_1 \ \bra{e_2}}}} \\
+\ea
+$$
+\end{figure}
+
+\flushleft
+\begin{footnotesize}
+  Transformation of reverse-mode AD with metalanguage that contains shift/reset.
+  Rules that are different from standard transformation are labeled by color.
+  % with red highlighting differences due to introduction of gradient field,
+  % and blue highlighting differences due to gradient computation.
+\end{footnotesize}
+\clearpage
+
+
+\subsection{Reverse-mode AD Transformation in CPS}
+\begin{figure}[h]
+$$\footnotesize
+\ba{rll}
+% \textbf{Reverse Mode AD Transformation} \\
+% \textbf{in CPS:} \\
+\texttt{Transform}(f) &=& \underline \lambda x. \ \DLet{\hat x}{\DPair{x}{\DRef 0}} \\
+                       % && \quad \quad \DLet{k}{\underline \lambda \ z. \ \DSnd{z} \ \underline{:=} \ 1.0} \\
+                       % && \quad \quad \Sat \orb\bra{f} \ (\overline \lambda m. \ \Dat ( \Dat m \ \hat x) \ k)\underline{;} \\
+                       && \quad \ \ \ \Sat \orb\bra{f} \ (\overline \lambda m. \ \Dat ( \Dat m \ \hat x) \ (\WLam z. \ \DLet{\hat z}{z} z' \ \underline{:=} \ 1.0))\underline{;} \\
+                       && \quad \quad \DDref{x'} \ \\
+          \texttt{where } \orb\bra{.}: && \Exp \rightarrow \Exp \ \ \ \text{is defined as below:} \\
+                       \\
+\orb\bra{ c }         &=& \overline \lambda \kappa.\ \Sat \kappa \ c \ \ \text{if} \ c \notin \RR \\
+\orb\bra{ c }         &=& \overline \lambda \kappa.\ \Sat \kappa \ \Red{\DPair{c}{\DRef 0}} \ \ \text{if} \ c \in \RR \\
+% \orb\bra{ x }         &=& \overline \lambda \kappa.\ \Sat \kappa \ x \\
+\orb\bra{ y }         &=& \overline \lambda \kappa.\ \Sat \kappa \ y \\
+\orb\bra{ e_1 + e_2 } &=& \overline \lambda \kappa. \
+                         \Blue{\Sat \orb\bra{e_1}(\overline \lambda p_1. \ \Sat \orb\bra{e_2}(\overline \lambda p_2.} \ \ \#\# \\
+                      && \quad \quad \Blue{\DLet{\hat y_1}{p_1}} \ \Blue{\DLet{\hat y_2}{p_2}} \\
+                      && \quad \quad \Blue{\DLet{\hat y}{\DPair{\DAdd{y_1}{y_2}}{\DRef 0}}} \\
+                      && \quad \quad \Blue{\Sat \kappa \ \hat y\underline{;}}\\
+                      && \quad \quad \Blue{\DUpdate{y_1'}{\DDref y'}\underline{;}}\\
+                      && \quad \quad \Blue{\DUpdate{y_2'}{\DDref y'}))}\\
+\orb\bra{ e_1 * e_2 } &=& \overline \lambda \kappa. \
+                         \Blue{\Sat \orb\bra{e_1}(\overline \lambda p_1. \ \Sat \orb\bra{e_2}(\overline \lambda p_2.} \ \ \#\# \\
+                      && \quad \quad \Blue{\DLet{\hat y_1}{p_1}} \ \Blue{\DLet{\hat y_2}{p_2}} \\
+                      && \quad \quad \Blue{\DLet{\hat y}{\DPair{\DMul{y_1}{y_2}}{\DRef 0}}} \\
+                      && \quad \quad \Blue{\Sat \kappa \ \hat y\underline{;}} \\
+                      && \quad \quad \Blue{\DUpdate{y_1'}{\DMul{\DDref y'}{y_2}}\underline{;}} \\
+                      && \quad \quad \Blue{\DUpdate{y_2'}{\DMul{\DDref y'}{y_1}}))} \\
+\orb\bra{ \lambda y. \ e } &=& \overline \lambda \kappa. \ \Sat \kappa \ (\underline \lambda y. \ \underline \lambda k.
+                                  \ \Sat \orb\bra{e} (\SLam m. \ \Wat k \ m)) \\
+\orb\bra{ \ \At e_1 \ e_2}
+&=& \overline \lambda \kappa. \ \Sat \orb\bra{e_1}(\overline \lambda m. \ \Sat \orb\bra{e_2}(\overline \lambda n. \
+    \Dat (\ \Dat m \ n) \ (\WLam a. \ \Sat \kappa \ a))) \\
+\#  \ \ \ \orb\bra{\Let{y}{e_1} e_2}
+&=& \overline \lambda \kappa. \ \Sat \orb\bra{e_1}(\overline \lambda y_1. \ \DLet{y}{y_1} \Sat \orb\bra{e_2} \ \kappa) \\
+\orb\bra{\Fst{e}} &=& \overline \lambda \kappa. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DFst{y})) \\
+\orb\bra{\Snd{e}} &=& \overline \lambda \kappa. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DSnd{y})) \\
+\orb\bra{\Ref{e}} &=& \overline \lambda \kappa. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DRef{y})) \\
+\orb\bra{! \ {e}} &=& \overline \lambda \kappa. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DDref{y})) \\
+\orb\bra{e_1 := e_2} &=& \overline \lambda \kappa. \ \Sat \orb\bra{e_1}(\overline \lambda y_1. \ \Sat \orb\bra{e_2}
+   (\overline \lambda y_2. \ \Sat \kappa \ ( y_1 \ \underline{:=} \ y_2))) \\
+\orb\bra{(e_1, e_2)} &=& \overline \lambda \kappa. \ \Sat \orb\bra{e_1}(\overline \lambda y_1. \ \Sat \orb\bra{e_2}
+   (\overline \lambda y_2. \ \Sat \kappa \ (\DPair{y_1}{y_2}))) \\
+\orb\bra{\Left{e}}  &=& \overline \lambda \kappa. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DLeft{y})) \\
+\orb\bra{\Right{e}} &=& \overline \lambda \kappa. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Sat \kappa \ (\DRight{y})) \\
+\orb\bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}}
+&=& \overline \lambda \kappa. \ \WLet{k}{\WLam a. \ \Sat \kappa \ a} \Sat \orb\bra{e}(\overline \lambda v. \
+                                \DPatL{v}{y_1}{\Sat \orb\bra{e_1}(\SLam m. \ \Wat k \ m)}
+                                         {y_2}{\Sat \orb\bra{e_2}(\SLam n. \ \Wat k \ n)}) \\
+\\
+\ea
+$$
+\end{figure}
+\vspace{-4ex}
+\flushleft
+\begin{footnotesize}
+  Transformation of source language for reverse-mode AD in CPS (meta language doesn't contain shift/reset).
+  Rules that are different from standard CPS transformation are highlighted by color.
+  % with red labeling differences due to introduction of gradient field,
+  % and blue labeling differences due to gradient computation.\\
+  Note that in the plus rule and the multiplication rule (labeled by \#\#),
+  we avoided using variable sugaring in $\overline \lambda p_1$ and $\overline \lambda p_2$
+  so that we can introduce dynamic let-binding for them. The dynamic let-bindings are necessary
+  to preserve sharing, evaluation order, and asymptotic complexity, since the RHS of them are accessed multiple times
+  via $y_1, y_1', y_2$, and $y_2'$.
+  % although the $\overline \lambda \hat y_1$ and $\overline \lambda \hat y_2$ are static abstraction,
+  % the let-binding from de-sugaring them will be dynamic (i.e. retained in the transformed code).
+\end{footnotesize}
+
+\clearpage
+
+
+% \begin{figure}[h]
+% $$\footnotesize
+% \ba{rll}
+% \textbf{Reverse Mode AD Transformation:} \\
+% \text{properly tail recursive} \\
+% \orb\bra{ c^{\tau \ne \RR} }' &=& \overline \lambda k.\ \Dat k \ c\\
+% \orb\bra{ c^{\RR} }'          &=& \overline \lambda k.\ \Dat k \ (c, \Ref 0) \\
+% \orb\bra{ x }'                &=& \overline \lambda k.\ \Dat k \ \hat x \\
+% \orb\bra{ y }'                &=& \overline \lambda k.\ \Dat k \ \hat y \\
+% \orb\bra{ e_1 + e_2 }' &=& \overline \lambda k. \ \Sat \orb\bra{e_1}(\overline \lambda \hat y_1. \ \Sat \orb\bra{e_2}(\overline \lambda \hat y_2. \\
+%                        && \quad \quad \Let{\hat y}{(y_1 + y_2, \Ref 0)} \\
+%                        && \quad \quad \Dat k \ \hat y;\\
+%                        && \quad \quad y_1' \ \mathrel{+}= \ !\ y';\\
+%                        && \quad \quad y_2' \ \mathrel{+}= \ !\ y'))\\
+% \orb\bra{ e_1 * e_2 }' &=& \overline \lambda k. \ \Sat \orb\bra{e_1}(\overline \lambda \hat y_1. \ \Sat \orb\bra{e_2}(\overline \lambda \hat y_2. \\
+%                        && \quad \quad \Let{\hat y}{(y_1 + y_2, \Ref 0)} \\
+%                        && \quad \quad \Dat k \ \hat y;\\
+%                        && \quad \quad y_1' \ \mathrel{+}= \ !\ y' * y_2;\\
+%                        && \quad \quad y_2' \ \mathrel{+}= \ !\ y' * y_1))\\
+% \orb\bra{ \lambda y^\tau. \ e }' &=& \overline \lambda k. \ \Dat k \ (\underline \lambda \hat y^\tau. \ \underline \lambda k.
+%                                                           \ \Sat \orb\bra{e}' k) \\
+% \orb\bra{ \ \At e_1 \ e_2}'
+% &=& \overline \lambda k. \ \Sat \orb\bra{e_1}(\overline \lambda m. \ \Sat \orb\bra{e_2}(\overline \lambda n. \
+%     \Dat (\ \Dat m \ n) \ k)) \\
+% \orb\bra{\Let{y^\tau}{e_1} e_2}'
+% &=& \overline \lambda k. \ \Sat \orb\bra{e_1}(\overline \lambda \hat y^\tau. \ \Sat \orb\bra{e_2} \ k) \\
+% % &=& \overline \lambda k. \ \Sat \orb\bra{e_1}(\overline \lambda \hat y^\tau. \ \DLet{\tilde y}{y_1} \Sat \orb\bra{e_2[y \leftarrow \tilde y]} \ k) \\
+% \orb\bra{\Fst{e}}'    &=& \overline \lambda k. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Dat k \ (\DFst{y})) \\
+% \orb\bra{\Snd{e}}'    &=& \overline \lambda k. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Dat k \ (\DSnd{y})) \\
+% \orb\bra{\Ref{e}}'    &=& \overline \lambda k. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Dat k \ (\DRef{y})) \\
+% \orb\bra{! \ {e}}'    &=& \overline \lambda k. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Dat k \ (\underline ! \ {y})) \\
+% \orb\bra{e_1 := e_2}' &=& \overline \lambda k. \ \Sat \orb\bra{e_1}(\overline \lambda y_1. \ \Sat \orb\bra{e_2}
+%    (\overline \lambda y_2. \ \Dat k \ ( y_1 \ \underline{:=} \ y_2))) \\
+% \orb\bra{(e_1, e_2)}' &=& \overline \lambda k. \ \Sat \orb\bra{e_1}(\overline \lambda y_1. \ \Sat \orb\bra{e_2}
+%    (\overline \lambda y_2. \ \Dat k \ (\DPair{y_1}{y_2}))) \\
+% \orb\bra{\Left{e}{\tau}}'  &=& \overline \lambda k. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Dat k \ (\DLeft{y}{\ort\bra{\tau}})) \\
+% \orb\bra{\Right{\tau}{e}}' &=& \overline \lambda k. \ \Sat \orb\bra{e}(\overline \lambda y. \ \Dat k \ (\DRight{\ort\bra{\tau}}{y})) \\
+% % \orb\bra{\Pat{e_1}{y}{e_2}{z}{e_3}}'
+% % &=& \overline \lambda k. \ \Sat \orb\bra{e_1}(\overline \lambda v. \ \DPatL{v}
+% %                           {\hat y_1}{\DLet{\tilde y}{\hat y_1} \Sat \bra{e_2[y \leftarrow \tilde y]}' k}
+% %                           {\hat z_1}{\DLet{\tilde z}{\hat z_1} \Sat \bra{e_3[z \leftarrow \tilde z]}' k}) \\
+% \orb\bra{\Pat{e}{y_1}{e_1}{y_2}{e_2}}'
+% &=& \overline \lambda k. \ \Sat \orb\bra{e}(\overline \lambda v. \ \DPatL{v}
+%                           {\hat y_1}{\Sat \bra{e_1}' k}
+%                           {\hat y_2}{\Sat \bra{e_2}' k}) \\
+% \\
+% \\
+% \ea
+% $$
+% \end{figure}
+% \clearpage
+
+\newcommand{\LIST}[0]{\texttt{List}}
+\newcommand{\LISTT}[0]{\texttt{List'}}
+\newcommand{\LEN}[0]{\texttt{Nat}}
+
+\section{Examples}
+\flushleft
+\begin{footnotesize}
+  Below we show examples of CPS transformation for reverse-mode AD.
+  The results of transformation are only composed of target language expressions (all metalanguage redex have been removed).
+  For clarity we elide the underline notations. We also drop the \At symbol in application for readability.
+\end{footnotesize}
+
+$$\footnotesize
+\ba{rll}
+\textbf{Loop Example:} && \text{the function $f$ computes power($x$, $l$) in a loop} \\
+% \text{This example shows power(x, n) in a loop. }\\
+% \text{Type: } \LEN \ &=& \mu \alpha. \UNIT + \alpha \\
+\text{Term: }f &=& \lambda x. \ \Let{l}{\Right{(\Right{(\Left{()})})}} \\
+               && \Let{f_0}{\lambda f. \lambda ll. \lambda ac. \ \PatL{ll}
+               {y_1}{ac \quad \quad \quad \quad \quad \quad \quad \quad \ \ \text{// if $l$ is $0$, return $ac$}}
+               {y_2}{f \ f \ y_2 \ (x_0 * ac)}} \quad \quad \text{// if $l$ is not $0$, recurse on $x_0 * ac$ and $l-1$}
+               \\
+               &&  f_0 \ f_0 \ l \ 1 \\
+% \text{Type of } f_0 &=& \mu \alpha. \alpha \rightarrow \LEN \rightarrow \RR \rightarrow \RR \rightarrow \RR
+% \ \ \text{this type is often not allowed} \\s
+\text{Transformation: } \\
+\texttt{Transform}(f) &=& \lambda x. \ \Let{\hat x}{(x, \Ref 0)} \ (\lambda \tilde x. \ (\lambda k. \\
+ && \quad \quad \Let{l}{\Right{(\Right{(\Left{()})})}} \\
+ && \quad \quad \Let{f_0}{\lambda f. \lambda k_1. \  k_1 \ (\lambda ll. \lambda k_2. \  k_2 \ (\lambda {ac}. \lambda k_3. \\
+ && \quad \quad \Pat{ll}{y_1}{ k_3 \ {ac}}{y_2}{\\
+ && \quad \quad \quad \quad  (f \ f)(\lambda a_3. \  ( a_3 \ y_2) \ (\lambda a_2. \\
+ && \quad \quad \quad \quad \Let{\hat z_1}{ x} \\
+ && \quad \quad \quad \quad \Let{\hat z_2}{ {ac}} \\
+ && \quad \quad \quad \quad \Let{\hat z}{(z_1 * z_2, \Ref 0)} \\
+ && \quad \quad \quad \quad \quad (a_2 \ \hat z) k_3; \\
+ && \quad \quad \quad \quad \quad z_1' \mathrel{+}= \ ! \ z' * z_2; \\
+ && \quad \quad \quad \quad \quad z_2' \mathrel{+}= \ ! \ z' * z_1 )))}))} \\
+ && \quad \quad (f_0 \ f_0) (\lambda a_{22}. \ (a_{22} \ l) \ (\lambda a_{11}.\ ( a_{11} \ (1, \Ref 0)) \ k))) \\
+ && \quad \quad \hat x \ (\lambda y. \Let{\hat y}{y} y' := 1.0); \\
+ && \quad \quad ! \ x' \\
+\ea
+$$
+
+
+
+$$\footnotesize
+\ba{rll}
+\textbf{List Example:} && \text{the function $f$ computes the product of all reals in list $l$ with $x$ recursively} \\
+% \text{Type: } \LIST \ &=& \mu \alpha. \UNIT + \RR \times \alpha \\
+% \text{Type: } \LISTT \ &=& \ort\bra{\LIST} = \mu \alpha. \UNIT + (\RR \times \REF \RR) \times \alpha \\
+\text{Term: }f &=& \lambda x. \ \Let{l}{\Right{(5, \Right{(6, \Left{()})})}} \\
+               && \Let{f_0}{\lambda f. \lambda ll. \ \PatL{ll}
+               {y_1}{x \quad \quad \quad \quad \quad \quad \quad \quad \quad \ \ \ \quad \quad \quad \quad \quad \text{// if $l$ is empty, return $x$}}
+               {y_2}{(\Fst y_2) * ((f\ f) (\Snd y_2))}} \quad \quad \text{// if $l$ is not empty, return $l.$head$ * f(l.$tail$)$}
+               \\
+               &&  ( f_0 \ f_0) \ l \\
+% \text{Type of } f_0 &=& \mu \alpha. \alpha \rightarrow \LIST \rightarrow \RR \rightarrow \RR \\
+\text{Transformation: } \\
+\texttt{Transform}(f) &=& \lambda x. \ \Let{\hat x}{(x, \Ref 0)} \ (\lambda \tilde x. \ (\lambda k. \\
+ && \quad \quad \Let{l}{\Right{((5, \Ref 0), \Right{((6, \Ref 0), \Left{()})})}} \\
+ && \quad \quad \Let{f_0}{\lambda  f. \lambda k_1. \  k_1 \ (\lambda ll. \lambda k_2. \\
+ && \quad \quad \Pat{ll}{y_1}{k_2 \ \tilde x}{y_2}{\\
+ && \quad \quad \quad \quad (f \ f)(\lambda a_1. \ (a_1 \ (\Snd y_2)) \ (\lambda a. \\
+ && \quad \quad \quad \quad \Let{\hat z_1}{\Fst y_2} \\
+ && \quad \quad \quad \quad \Let{\hat z_2}{a} \\
+ && \quad \quad \quad \quad \Let{\hat z}{(z_1 * z_2, \Ref 0)} \\
+ && \quad \quad \quad \quad \quad k_2 \ \hat z; \\
+ && \quad \quad \quad \quad \quad z_1' \mathrel{+}= \ ! \ z' * z_2; \\
+ && \quad \quad \quad \quad \quad z_2' \mathrel{+}= \ ! \ z' * z_1 ))})} \\
+ && \quad \quad (f_0 \ f_0) (\lambda a_{11}. (a_{11} \ l) \ k))) \\
+ && \quad \quad \hat x \ (\lambda y. \Let{\hat y}{y} y' := 1.0); \\
+ && \quad \quad ! \ x' \\
+\ea
+$$
+
+\newcommand{\RIGHT}[0]{\texttt{Right}}
+
+$$\footnotesize
+\ba{rll}
+\textbf{Tree Example:} && \text{the function $f$ compute the sum of all reals in the binary tree $t$, with $x$ in each leaf node} \\
+% \text{Type: } \TR  &=& \mu \alpha. \UNIT + (\RR \times (\alpha \times \alpha))\\
+% \text{Type: } \TRR &=& \ort\bra{\TR} = \mu \alpha. \UNIT + ((\NUM) \times (\alpha \times \alpha))\\
+% \text{Type: } \RIGHT &=& (\NUM) \times (\TRR \times \TRR)\\
+\text{Term: } f
+ &=& \lambda x. \ \Let{t}{\Right{(5, (\Left{()},\Left{()}))}} \\
+  && \Let{f_0}{\lambda f. \lambda tt. \ \PatL{tt}
+     {y_1}{x \quad \quad \quad \quad \quad \quad \quad \ \ \ \quad \quad \quad \text{// if $t$ is empty, return x}}
+     {y_2}{(\Fst y_2) \ + \\
+  && \quad \quad \ \ \ \quad  (f\ f\ (\Fst (\Snd y_2))) \ + \\
+  && \quad \quad \ \ \ \quad  (f\ f\ (\Snd (\Snd y_2)))}}  \quad \text{// otherwise, return $t.$value$ + f(t.$left$) + f(t.$right$)$}\\
+  &&  \ ( f_0 \ f_0) \ t \\
+% \text{Type of } f_0 &=& \mu \alpha. \alpha \rightarrow \TR \rightarrow \RR \rightarrow \RR \\
+\text{Transformation:} \\
+\texttt{Transform}(f) &=& \lambda x. \ \Let{\hat x}{(x, \Ref 0)} \ (\lambda \tilde x. \ (\lambda k. \\
+ && \quad \quad \Let{t}{\Right{((5, \Ref 0), (\Left{()},\Left{()}))}} \\
+ && \quad \quad \Let{f_0}{\lambda f. \lambda k_1. \ k_1 \ (\lambda tt. \lambda k_2.\\
+ && \quad \quad \Pat{tt}{y_1}{k_2 \ \tilde x}{y_2}{\\
+ && \quad \quad \quad \quad (f \ f)(\lambda a_1. \ (a_1 \ (\Fst (\Snd y_2))) \ (\lambda a.\\
+ && \quad \quad \quad \quad \Let{\hat z_1}{\Fst y_2} \\
+ && \quad \quad \quad \quad \Let{\hat z_2}{a} \\
+ && \quad \quad \quad \quad \Let{\hat z}{(z_1 + z_2, \Ref 0)} \\
+ % && \quad \quad \quad \quad \quad  k_3 \ \hat z; \\
+ && \quad \quad \quad \quad \quad (f \ f)(\lambda b_1. \ (b_1 \ (\Snd (\Snd y_2))) \ (\lambda b.\\
+ && \quad \quad \quad \quad \quad \quad \Let{\hat w_1}{\hat z} \\
+ && \quad \quad \quad \quad \quad \quad \Let{\hat w_2}{b} \\
+ && \quad \quad \quad \quad \quad \quad \Let{\hat w}{(w_1 + w_2, \Ref 0)} \\
+ && \quad \quad \quad \quad \quad \quad \quad k_2 \ \hat w; \\
+ && \quad \quad \quad \quad \quad \quad \quad w_1' \mathrel{+}= \ ! \ w'; \\
+ && \quad \quad \quad \quad \quad \quad \quad w_2' \mathrel{+}= \ ! \ w'))) \\
+ && \quad \quad \quad \quad \quad z_1' \mathrel{+}= \ ! \ z'; \\
+ && \quad \quad \quad \quad \quad z_2' \mathrel{+}= \ ! \ z')})} \\
+ && \quad \quad (f_0 \ f_0) (\lambda a_{11}. (a_{11} \ t) \ k))) \\
+ && \quad \quad \hat x \ (\lambda y. \Let{\hat y}{y} y' := 1.0); \\
+ && \quad \quad ! \ x' \\
+\ea
+$$
+\vspace{5ex}
+% \clearpage
+\bibliography{../references}
+
+\end{document}
